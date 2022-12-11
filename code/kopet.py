@@ -37,6 +37,26 @@ def saglabat_iin(csvreader, fails):
 #                print("atvk: "+row[0]+" nosaukums: "+row[1]+" gads: "+row[2]+" periods: "+row[3]+" datums: "+row[4]+" sadalits: "+row[5]+" pfif: "+row[6])
                 if pirma_rinda:
                     try:
+                        rinda0 = str(row[0])
+                    except:
+                        rinda0 = ""
+                    try:
+                        rinda1 = str(row[1])
+                    except:
+                        rinda1 = ""
+                    try:
+                        rinda2 = str(row[2])
+                    except:
+                        rinda2 = ""
+                    try:
+                        rinda3 = str(row[3])
+                    except:
+                        rinda3 = ""
+                    try:
+                        rinda4 = str(row[4])
+                    except:
+                        rinda4 = ""
+                    try:
                         rinda5 = float(str(row[5]).replace(",", "."))
                     except:
                         rinda5 = float("0.0")
@@ -44,7 +64,7 @@ def saglabat_iin(csvreader, fails):
                         rinda6 = float(str(row[6]).replace(",", "."))
                     except:
                         rinda6 = float("0.0")
-                    s.add(Book(tips='iin', atvk=row[0], nosaukums=row[1], gads=row[2], periods=row[3],datums=row[4],
+                    s.add(Book(tips='iin', atvk=rinda0, nosaukums=rinda1, gads=rinda2, periods=rinda3,datums=rinda4,
                            sadalits=rinda5,
                                pfif=rinda6
                                ))
