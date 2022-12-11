@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from db_faili.crud import *
-from db_faili.models import *
+#from db_faili.crud import *
+#from db_faili.models import *
 
 if __name__ == '__main__':
     Base.metadata.create_all(engine)
