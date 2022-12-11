@@ -24,7 +24,7 @@ class papildu():
     def logi(logs):
         print(logs)
 
-ef saglabat_iin(csvreader, fails):
+def saglabat_iin(csvreader, fails):
     try:
         Base.metadata.create_all(engine)
 
