@@ -21,8 +21,6 @@ class papildu():
         except Exception as e:
             print("Kļūda lasto failu" + str(e))
 
-    def logi(logs):
-        print(logs)
 
 def saglabat_iin(csvreader, fails):
     try:
@@ -64,7 +62,7 @@ def saglabat_iin(csvreader, fails):
                         rinda6 = float(str(row[6]).replace(",", "."))
                     except:
                         rinda6 = float("0.0")
-                    s.add(Book(tips='iin', atvk=rinda0, nosaukums=rinda1, gads=rinda2, periods=rinda3,datums=rinda4,
+                    s.add(Book(tips='iin', atvk=rinda0, nosaukums=rinda1, gads=rinda2, periods=rinda3, datums=rinda4,
                            sadalits=rinda5,
                                pfif=rinda6
                                ))

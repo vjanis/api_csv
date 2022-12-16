@@ -1,16 +1,17 @@
 from datetime import datetime, date
 from time import sleep
 import os
-
+from config import *
 from code import papildu
 
 failu_mape = r"./api_csv/faili"
 uz_mapi = './api_csv/old/'
-atdalitajs = '|'
-taimers = 10
+atdalitajs = CSV_ATDALITAJS
+taimers = PARBAUDES_TIMERIS
+
 
 def darbiba_ar_failu(fails):
-    papildu.nolasit_csv(fails, '|')
+    papildu.nolasit_csv(fails, atdalitajs)
     papildu.kopet_failu(fails, failu_mape + '/', uz_mapi)
 
 
