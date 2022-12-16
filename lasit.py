@@ -2,7 +2,7 @@ from datetime import datetime, date
 from time import sleep
 import os
 from config import *
-from code import papildu
+from code import papildu, logi
 
 failu_mape = r"./api_csv/faili"
 uz_mapi = './api_csv/old/'
@@ -18,12 +18,12 @@ def darbiba_ar_failu(fails):
 def parbauda():
     for x in os.listdir(failu_mape):
         if x.endswith(".csv"):
-            papildu.logi(
+            logi(
                 "Atrasts: " + failu_mape + '/' + x + " Laiks: " + date.today().strftime("%Y%m%d") + '_' +datetime.now().time().strftime("%H:%M:%S"))
             darbiba_ar_failu((failu_mape + '/' + x))
         else:
-            papildu.logi(
-                "Nav korekts fails!!!: " + failu_mape + '/' + x + " Laiks: " + date.today().strftime("%Y%m%d") + '_' +datetime.now().time().strftime("%H:%M:%S"))
+            logi(
+                "Nav korekts fails!!!: " + failu_mape + '/' + x + " Laiks: " + date.today().strftime("%Y%m%d") + '_' + datetime.now().time().strftime("%H:%M:%S"))
 
 
 if __name__ == "__main__":
