@@ -1,5 +1,3 @@
-### models.py ###
-
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Date, Float
 
@@ -23,4 +21,7 @@ class Book(Base):
 
     def __repr__(self):
         return "<Book(tips='{}', atvk='{}', nosaukums={}, gads={}, periods={}, datums={}, sadalits={}, pfif={})>" \
-            .format(self.tips, self.atvk, self.nosaukums, self.gads, self.periods, self.datums, self.sadalits, self.pfif)
+            .format(self.tips, self.atvk, self.nosaukums, self.gads,
+                    self.periods, self.datums, self.sadalits, self.pfif)
+
+

@@ -2,6 +2,7 @@ import shutil
 import os
 import csv
 from datetime import datetime, date
+from sqlalchemy.orm import sessionmaker
 
 from db_faili.crud import *
 from db_faili.models import *
