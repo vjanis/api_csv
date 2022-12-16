@@ -2,8 +2,8 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from config import *
-from models import *
+from db_faili.config import *
+from db_faili.models import *
 
 engine = create_engine(DATABASE_URI)
 
