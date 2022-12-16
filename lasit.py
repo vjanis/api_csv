@@ -2,7 +2,7 @@ from datetime import datetime, date
 from time import sleep
 import os
 
-from code.kopet import papildu
+from code import papildu
 
 failu_mape = r"./api_csv/faili"
 uz_mapi = './api_csv/old/'
