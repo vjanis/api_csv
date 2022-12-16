@@ -1,1 +1,1 @@
-from kopet import papildu
+from code.kopet import papildu
