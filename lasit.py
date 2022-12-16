@@ -2,7 +2,7 @@ from datetime import datetime, date
 from time import sleep
 import os
 from config import *
-from code import papildu, logi
+from code import kopet_failu, nolasit_csv, logi
 
 failu_mape = r"./api_csv/faili"
 uz_mapi = './api_csv/old/'
@@ -11,8 +11,8 @@ taimers = PARBAUDES_TIMERIS
 
 
 def darbiba_ar_failu(fails):
-    papildu.nolasit_csv(fails, atdalitajs)
-    papildu.kopet_failu(fails, failu_mape + '/', uz_mapi)
+    nolasit_csv(fails, atdalitajs)
+    kopet_failu(fails, failu_mape + '/', uz_mapi)
 
 
 def parbauda():

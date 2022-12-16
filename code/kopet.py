@@ -8,21 +8,21 @@ from code.logosana import logi
 from db_faili.crud import *
 from db_faili.models import *
 
-class papildu():
-    def kopet_failu(fails, no_mapes, uz_mapi):
-        jaunais_nosaukums = fails.replace(no_mapes, uz_mapi + date.today().strftime("%Y%m%d") + '_' +
-                                          datetime.now().time().strftime("%H%M%S") + '_')
-        shutil.copyfile(fails, jaunais_nosaukums)
-        os.remove(fails)
 
-    def nolasit_csv(fails, atdalitajs):
-        try:
-            with open(fails, 'r', encoding="utf-8") as file:
-                csvreader = csv.reader(file, delimiter=atdalitajs)
-                saglabat_iin(csvreader, fails)
-                file.close()
-        except Exception as e:
-            logi("Kļūda lasto failu" + str(e))
+def kopet_failu(fails, no_mapes, uz_mapi):
+    jaunais_nosaukums = fails.replace(no_mapes, uz_mapi + date.today().strftime("%Y%m%d") + '_' +
+                                          datetime.now().time().strftime("%H%M%S") + '_')
+    shutil.copyfile(fails, jaunais_nosaukums)
+    os.remove(fails)
+
+def nolasit_csv(fails, atdalitajs):
+    try:
+        with open(fails, 'r', encoding="utf-8") as file:
+            csvreader = csv.reader(file, delimiter=atdalitajs)
+            saglabat_iin(csvreader, fails)
+            file.close()
+    except Exception as e:
+        logi("Kļūda lasto failu" + str(e))
 
 
 def saglabat_iin(csvreader, fails):

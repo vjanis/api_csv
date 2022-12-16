@@ -1,2 +1,2 @@
-from code.kopet import papildu
+from code.kopet import kopet_failu, nolasit_csv
 from code.logosana import logi
