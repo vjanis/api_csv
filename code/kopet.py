@@ -13,7 +13,13 @@ def kopet_failu(fails, no_mapes, uz_mapi):
     jaunais_nosaukums = fails.replace(no_mapes, uz_mapi + date.today().strftime("%Y%m%d") + '_' +
                                           datetime.now().time().strftime("%H%M%S") + '_')
     shutil.copyfile(fails, jaunais_nosaukums)
+    logi(
+        "Pārkopēts : " + fails + " -> " + jaunais_nosaukums + " Laiks: " + date.today().strftime("%Y%m%d") +
+        '_' + datetime.now().time().strftime("%H:%M:%S"))
     os.remove(fails)
+    logi(
+        "Izdzēsts : " + fails + " Laiks: " + date.today().strftime("%Y%m%d") +
+        '_' + datetime.now().time().strftime("%H:%M:%S"))
 
 def nolasit_csv(fails, atdalitajs):
     try:
