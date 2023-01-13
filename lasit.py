@@ -20,8 +20,7 @@ def parbauda():
             logi(
                 "Atrasts: " + failu_mape + os.sep + x + " Laiks: " + date.today().strftime("%Y%m%d") +
                 '_' +datetime.now().time().strftime("%H:%M:%S"))
-#            darbiba_ar_failu((failu_mape + '/' + x))
-            kopet_failu((failu_mape + os.sep + x), failu_mape + os.sep, uz_mapi + os.sep)
+            darbiba_ar_failu((failu_mape + os.sep + x))
         else:
             logi(
                 "Nav korekts fails!!!: " + failu_mape + os.sep + x + " Laiks: " + date.today().strftime("%Y%m%d") +
