@@ -2,6 +2,7 @@ from datetime import datetime, date
 from time import sleep
 import os
 from config import *
+
 from code import kopet_failu, nolasit_csv, logi
 
 failu_mape = os.path.join('.', 'faili')

@@ -1,7 +1,8 @@
 
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Date, Float, Boolean, JSON
+from sqlalchemy import Column, Integer, String, Date, Float, Boolean, JSON, ForeignKey
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -26,20 +27,31 @@ class Book(Base):
             .format(self.tips, self.atvk, self.nosaukums, self.gads,
                     self.periods, self.datums, self.sadalits, self.pfif)
 
-
 class Csv_faili(Base):
     __tablename__ = 'csv_faili'
     id = Column(Integer, primary_key=True)
+    api = Column(String)
     csv_file_name = Column(String)
-    atvk = Column(String)
-    gads = Column(String)
-    datums = Column(String)
-    json_text = Column(JSONB)
     created = Column(Date)
     is_active = Column(Boolean, unique=False, default=True)
 
     def __repr__(self):
-        return "<Csv_faili(id='{}', csv_file_name='{}', atvk={}, gads={}, " \
-               "datums={}, json_text={}, created={}, is_active={})>" \
-            .format(self.id, self.csv_file_name, self.atvk, self.gads,
-                    self.datums, self.json_text, self.created, self.is_active)
+        return "<Csv_faili(id='{}', api='{}', csv_file_name={}, created={}, is_active={})>" \
+            .format(self.id, self.api, self.csv_file_name, self.created, self.is_active)
+
+class Csv_faili_json(Base):
+    __tablename__ = 'csv_faili_json'
+    id = Column(Integer, primary_key=True)
+    atvk = Column(String)
+    gads = Column(String)
+    datums = Column(String)
+    json_text = Column(JSONB)
+    csv_faili_id = Column(Integer, ForeignKey("csv_faili.id"))
+
+    csv_faili = relationship("Csv_faili", back_populates="csv_faili_json")
+
+    def __repr__(self):
+        return "<Csv_faili_json(id='{}', atvk='{}', gads={}, datums={}, json_text={})>" \
+            .format(self.id, self.atvk, self.gads, self.datums, self.json_text)
+
+    Csv_faili.csv_faili_json = relationship("Csv_faili_json", order_by=Csv_faili.id, back_populates="csv_faili")
