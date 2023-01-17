@@ -4,6 +4,7 @@ import os
 from config import *
 
 from code import kopet_failu, nolasit_csv, logi
+from db_faili.crud import create_database
 
 failu_mape = os.path.join('.', 'faili')
 uz_mapi = os.path.join('.', 'old')
@@ -30,6 +31,7 @@ def parbauda():
 
 if __name__ == "__main__":
     try:
+        create_database()
         while True:
             sleep(taimers)
             parbauda()

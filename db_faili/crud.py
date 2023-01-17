@@ -8,3 +8,6 @@ engine = create_engine(DATABASE_URI)
 def recreate_database():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
+
+def create_database():
+    Base.metadata.create_all(engine)

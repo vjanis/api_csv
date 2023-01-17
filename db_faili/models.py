@@ -1,8 +1,10 @@
 
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Date, Float, Boolean, JSON, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, Float, Boolean, JSON, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
+
+import datetime
 
 Base = declarative_base()
 
@@ -55,3 +57,41 @@ class Csv_faili_json(Base):
             .format(self.id, self.atvk, self.gads, self.datums, self.json_text)
 
     Csv_faili.csv_faili_json = relationship("Csv_faili_json", order_by=Csv_faili.id, back_populates="csv_faili")
+
+class Auditacija(Base):
+    __tablename__ = 'auditacija'
+    id = Column(Integer, primary_key=True)
+    laiks = Column(DateTime, default=datetime.datetime.utcnow)
+    darbiba = Column(String)
+    parametri = Column(String)
+    autorizacijas_lvl = Column(Integer)
+    statuss = Column(String)
+
+    def __repr__(self):
+        return "<Auditacija(id='{}', laiks='{}', darbiba={}, parametri={}, autorizacijas_lvl={}, statuss={})>" \
+            .format(self.id, self.laiks, self.darbiba, self.parametri, self.autorizacijas_lvl, self.statuss)
+
+
+class kofiguracija(Base):
+    __tablename__ = 'kofiguracija'
+    id = Column(Integer, primary_key=True)
+    api = Column(String)
+    kumulativs = Column(Boolean, unique=False, default=False)
+    atdalitajs = Column(String)
+    dati = Column(String)
+
+    def __repr__(self):
+        return "<kofiguracija(id='{}', api='{}', kumulativs={}, atdalitajs={}, dati={})>" \
+            .format(self.id, self.api, self.kumulativs, self.atdalitajs, self.dati)
+
+class Metrikas(Base):
+    __tablename__ = 'metrikas'
+    id = Column(Integer, primary_key=True)
+    metrika = Column(String)
+    vertiba = Column(String)
+    seciba = Column(Integer)
+    statuss = Column(Boolean, unique=False, default=True)
+
+    def __repr__(self):
+        return "<kofiguracija(id='{}', metrika='{}', vertiba={}, seciba={}, statuss={})>" \
+            .format(self.id, self.metrika, self.vertiba, self.seciba, self.statuss)
