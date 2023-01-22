@@ -64,7 +64,7 @@ class Auditacija(Base):
     laiks = Column(DateTime, default=datetime.datetime.utcnow)
     darbiba = Column(String)
     parametri = Column(String)
-    autorizacijas_lvl = Column(Integer)
+    autorizacijas_lvl = Column(String)
     statuss = Column(String)
 
     def __repr__(self):

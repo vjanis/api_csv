@@ -3,7 +3,7 @@ import os
 import csv
 from datetime import datetime, date
 from sqlalchemy.orm import sessionmaker
-from code.logosana import logi
+from code.logosana import logi, auditacija
 import json
 
 from db_faili.crud import *
@@ -17,11 +17,14 @@ def kopet_failu(fails, no_mapes, uz_mapi):
     logi(
         "Pārkopēts : " + fails + " -> " + jaunais_nosaukums + " Laiks: " + date.today().strftime("%Y%m%d") +
         '_' + datetime.datetime.now().time().strftime("%H:%M:%S"))
+    auditacija(darbiba='csv', parametri="Kopēt fails: " + fails + " -> " + jaunais_nosaukums,
+               autorizacijas_lvl='INFO', statuss='OK')
     os.remove(fails)
     logi(
         "Izdzēsts : " + fails + " Laiks: " + date.today().strftime("%Y%m%d") +
         '_' + datetime.datetime.now().time().strftime("%H:%M:%S"))
-
+    auditacija(darbiba='csv', parametri="Izdzēsts fails: " + fails,
+               autorizacijas_lvl='INFO', statuss='OK')
 
 def saglabat(csvreader, fails):
     try:
@@ -68,21 +71,28 @@ def saglabat(csvreader, fails):
                             row.remove(rinda)
                             break
                     skaits += 1
-                    print(vardnica)
+                    #print(vardnica)
                     csv_rinda.json_text = vardnica
                     csv_faili.csv_faili_json.append(csv_rinda)
             except:
                 print("Problema rindā: " + row)
+                auditacija(darbiba='csv', parametri="Problema rindā: " + row,
+                           autorizacijas_lvl='ERROR', statuss='OK')
             finally:
                 pirma_rinda = False
         s.add(csv_faili)
         s.commit()
+        auditacija(darbiba='csv', parametri="Saglabāti ieraksti: " + str(skaits) + " fails: " + fails,
+                   autorizacijas_lvl='INFO', statuss='OK')
         logi("Saglabāti ieraksti: " + str(skaits) + " fails: " + fails)
 
     except Exception as e:
         logi("Kļūda darbojoties ar db: " + str(e))
+        auditacija(darbiba='csv', parametri="Kļūda darbojoties ar db: " + str(e),
+                   autorizacijas_lvl='ERROR', statuss='OK')
     finally:
         s.close()
+
 
 def nolasit_csv(fails, atdalitajs):
     try:
@@ -93,7 +103,8 @@ def nolasit_csv(fails, atdalitajs):
             file.close()
     except Exception as e:
         logi("Kļūda lasto failu " + str(e))
-
+        auditacija(darbiba='csv', parametri="Kļūda lasto failu " + str(e),
+                   autorizacijas_lvl='ERROR', statuss='OK')
 
 def saglabat_iin(csvreader, fails):
     try:
