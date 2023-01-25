@@ -11,3 +11,7 @@ def recreate_database():
 
 def create_database():
     Base.metadata.create_all(engine)
+    try:
+        engine.execute('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);')
+    except:
+        pass

@@ -13,8 +13,9 @@ taimers = PARBAUDES_TIMERIS
 
 
 def darbiba_ar_failu(fails):
-    nolasit_csv(fails, atdalitajs)
-    kopet_failu(fails, failu_mape + os.sep, uz_mapi + os.sep)
+    kopejs_laiks = datetime.now()
+    nolasit_csv(fails, atdalitajs, kopejs_laiks)
+    kopet_failu(fails, failu_mape + os.sep, uz_mapi + os.sep, kopejs_laiks)
 
 def parbauda():
     for x in os.listdir(failu_mape):
