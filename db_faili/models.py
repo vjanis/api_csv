@@ -69,7 +69,7 @@ class Auditacija(Base):
             .format(self.id, self.laiks, self.darbiba, self.parametri, self.autorizacijas_lvl, self.statuss)
 
 
-class kofiguracija(Base):
+class Kofiguracija(Base):
     __tablename__ = 'kofiguracija'
     id = Column(Integer, primary_key=True)
     api = Column(String)
@@ -78,7 +78,7 @@ class kofiguracija(Base):
     dati = Column(String)
 
     def __repr__(self):
-        return "<kofiguracija(id='{}', api='{}', kumulativs={}, atdalitajs={}, dati={})>" \
+        return "<Konfiguracija(id='{}', api='{}', kumulativs={}, atdalitajs={}, dati={})>" \
             .format(self.id, self.api, self.kumulativs, self.atdalitajs, self.dati)
 
 class Metrikas(Base):

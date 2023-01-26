@@ -29,7 +29,7 @@ def kopet_failu(fails, no_mapes, uz_mapi, kopejs_laiks):
 def saglabat(csvreader, fails, kopejs_laiks):
     try:
         laiks = kopejs_laiks
-        Base.metadata.create_all(engine)
+        #Base.metadata.create_all(engine)
         Session = sessionmaker(bind=engine)
         s = Session()
         pirma_rinda = True
@@ -87,8 +87,16 @@ def saglabat(csvreader, fails, kopejs_laiks):
         s.close()
 
 
+def faila_konfiguracija(fails):
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    s.get(Kofiguracija, {"id": 1, "version_id": 10})
+    return None
+
+
 def nolasit_csv(fails, atdalitajs, kopejs_laiks):
     try:
+        #konfigs = faila_konfiguracija(fails)
         with open(fails, 'r', encoding="utf-8") as file:
             csvreader = csv.reader(file, delimiter=atdalitajs)
             # saglabat_iin(csvreader, fails)

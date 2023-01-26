@@ -1,6 +1,8 @@
 from datetime import datetime, date
 from time import sleep
 import os
+
+import lasit
 from config import *
 
 from code import kopet_failu, nolasit_csv, logi, auditacija
@@ -36,11 +38,20 @@ def parbauda():
 
 if __name__ == "__main__":
     try:
-        create_database()
         auditacija(darbiba='csv', parametri="Programma startējas", autorizacijas_lvl='INFO', statuss='OK')
+        konfig = create_database()
+        if konfig is not None:
+            atdalitajs = konfig[0].atdalitajs
+            #print(konfig[0].dati)
+            taimers = int(konfig[0].dati)
         while True:
             sleep(taimers)
+            #print("tagad: " + datetime.now().time().strftime("%H:%M:%S"))
             parbauda()
+    except Exception as e:
+        auditacija(darbiba='csv', parametri="csv beidza darbību: " + str(e),
+                   autorizacijas_lvl='ERROR', statuss='OK')
+        logi("Draugi, nav labi! csv beidza darbību: " + str(e))
     finally:
-        print("BEIGAS!!! Laiks: " + datetime.now().time().strftime("%H:%M:%S"))
+        logi("Programma Pārtrauca darbību: " + datetime.now().time().strftime("%H:%M:%S"))
         auditacija(darbiba='csv', parametri="Programma Pārtrauca darbību", autorizacijas_lvl='INFO', statuss='OK')

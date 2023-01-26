@@ -1,9 +1,11 @@
 
+
 from sqlalchemy.orm import sessionmaker
 
-from db_faili.crud import *
-from db_faili.models import *
-
+from db_faili.crud import engine
+from db_faili.models import Auditacija as Aa
+from sqlalchemy import DateTime
+import datetime
 
 def logi(logs):
     print(logs)
@@ -12,7 +14,7 @@ def logi(logs):
 def auditacija(darbiba: str = '', laiks: DateTime = datetime.datetime.utcnow, parametri: str = '',
                autorizacijas_lvl: str = '', statuss: str = ''):
     try:
-        audit = Auditacija()
+        audit = Aa()
         audit.darbiba = darbiba
         #audit.laiks = laiks
         audit.parametri = parametri
@@ -20,7 +22,7 @@ def auditacija(darbiba: str = '', laiks: DateTime = datetime.datetime.utcnow, pa
         audit.statuss = statuss
 
         try:
-            Base.metadata.create_all(engine)
+            #Base.metadata.create_all(engine)
             session = sessionmaker(bind=engine)
             s = session()
 
