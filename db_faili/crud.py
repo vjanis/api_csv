@@ -20,7 +20,7 @@ def create_database():
     try:
         Session = sessionmaker(bind=engine)
         s = Session()
-        code.logi("Izveidota db, default konfigs un indexi")
+        #code.logi("Izveidota db, default konfigs un indexi")
         konfig = s.execute(select(Kofiguracija).where(Kofiguracija.api == '|||')).first()
         if konfig is None:
             konfig = []
@@ -31,11 +31,12 @@ def create_database():
                 atdalitajs=CSV_ATDALITAJS,
                 dati=str(PARBAUDES_TIMERIS),
             )
-            code.logi("Izveidota db, megina saglabāt konfigu")
+            #code.logi("Izveidota db, megina saglabāt konfigu")
             s.add(kofiguracija)
-            s.commit()
+
             code.logi("Izveidota db, megina izveidot gin indexu jsonb")
             engine.execute('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);')
+            s.commit()
             code.logi("Izveidota db, default konfigs un indexi")
             code.auditacija(darbiba='csv_db', parametri="Izveidota db, default konfigs un indexi",
                             autorizacijas_lvl='INFO', statuss='OK')
