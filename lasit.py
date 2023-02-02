@@ -38,8 +38,8 @@ def parbauda():
 
 if __name__ == "__main__":
     try:
-        auditacija(darbiba='csv', parametri="Programma startējas", autorizacijas_lvl='INFO', statuss='OK')
         konfig = create_database()
+        auditacija(darbiba='csv', parametri="Programma startējas", autorizacijas_lvl='INFO', statuss='OK')
         if konfig is not None:
             atdalitajs = konfig[0].atdalitajs
             #print(konfig[0].dati)

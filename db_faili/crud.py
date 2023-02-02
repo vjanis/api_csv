@@ -21,6 +21,8 @@ def create_database():
         Session = sessionmaker(bind=engine)
         s = Session()
         konfig = s.execute(select(Kofiguracija).where(Kofiguracija.api == '|||')).first()
+        if konfig is None:
+            konfig = ''
         if len(konfig) == 0:
             kofiguracija = Kofiguracija(
                 api='|||',
