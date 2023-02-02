@@ -20,9 +20,10 @@ def create_database():
     try:
         Session = sessionmaker(bind=engine)
         s = Session()
+        code.logi("Izveidota db, default konfigs un indexi")
         konfig = s.execute(select(Kofiguracija).where(Kofiguracija.api == '|||')).first()
         if konfig is None:
-            konfig = ''
+            konfig = []
         if len(konfig) == 0:
             kofiguracija = Kofiguracija(
                 api='|||',
@@ -30,17 +31,19 @@ def create_database():
                 atdalitajs=CSV_ATDALITAJS,
                 dati=str(PARBAUDES_TIMERIS),
             )
+            code.logi("Izveidota db, megina saglabāt konfigu")
             s.add(kofiguracija)
             s.commit()
-            engine.execute('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);')
-            code.auditacija(darbiba='csv_db', parametri="Izveidota db, default konfigs un indexi",
-                       autorizacijas_lvl='INFO', statuss='OK')
+            code.logi("Izveidota db, megina izveidot gin indexu jsonb")
+            s.execute('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);')
             code.logi("Izveidota db, default konfigs un indexi")
+            code.auditacija(darbiba='csv_db', parametri="Izveidota db, default konfigs un indexi",
+                            autorizacijas_lvl='INFO', statuss='OK')
         else:
             return konfig
         return None
     except Exception as e:
-        code.auditacija(darbiba='csv_db', parametri="Saglabāti ieraksti: " + str(e),
+        code.auditacija(darbiba='csv_db', parametri="Draugi, nav labi! Inicējot bāzi ir kļūda:  " + str(e),
                    autorizacijas_lvl='ERROR', statuss='OK')
         code.logi("Draugi, nav labi! Inicējot bāzi ir kļūda: " + str(e))
     finally:
