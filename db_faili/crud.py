@@ -35,7 +35,7 @@ def create_database():
             s.add(kofiguracija)
             s.commit()
             code.logi("Izveidota db, megina izveidot gin indexu jsonb")
-            s.execute('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);')
+            engine.execute('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);')
             code.logi("Izveidota db, default konfigs un indexi")
             code.auditacija(darbiba='csv_db', parametri="Izveidota db, default konfigs un indexi",
                             autorizacijas_lvl='INFO', statuss='OK')
