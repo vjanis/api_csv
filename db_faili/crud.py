@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, select, text
 from sqlalchemy.orm import sessionmaker
 
 import code
@@ -35,8 +35,9 @@ def create_database():
             s.add(kofiguracija)
 
             code.logi("Izveidota db, megina izveidot gin indexu jsonb")
-            engine.execute('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);')
+            s.execute(text('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops)'))
             s.commit()
+
             code.logi("Izveidota db, default konfigs un indexi")
             code.auditacija(darbiba='csv_db', parametri="Izveidota db, default konfigs un indexi",
                             autorizacijas_lvl='INFO', statuss='OK')
