@@ -44,6 +44,9 @@ def saglabat(csvreader, fails, kopejs_laiks):
         pirma_rinda = True
         skaits = 0
         atslegas = None
+        print("os.sep: " + os.sep)
+        print("fails" + fails)
+        print(fails[fails.rfind(os.sep)+1:fails.rfind('.')])
         print(str(fails[fails.rfind(os.sep)+1:fails.rfind('.')])[38:])
         csv_faili = Csv_faili(
             api=str(fails[fails.rfind(os.sep)+1:fails.rfind('.')])[38:],
