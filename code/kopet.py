@@ -10,21 +10,30 @@ from db_faili.crud import *
 from db_faili.models import *
 
 def kopet_failu(fails, no_mapes, uz_mapi, kopejs_laiks):
-    laiks = kopejs_laiks
-    jaunais_nosaukums = fails.replace(no_mapes, uz_mapi + date.today().strftime("%Y%m%d") + '_' +
-                                          laiks.strftime("%H%M%S") + '_')
-    shutil.copyfile(fails, jaunais_nosaukums)
-    logi(
-        "Pārkopēts : " + fails + " -> " + jaunais_nosaukums + " Laiks: " + date.today().strftime("%Y%m%d") +
-        '_' + datetime.datetime.now().time().strftime("%H:%M:%S"))
-    auditacija(darbiba='csv', parametri="Kopēt fails: " + fails + " -> " + jaunais_nosaukums,
-               autorizacijas_lvl='INFO', statuss='OK')
-    os.remove(fails)
-    logi(
-        "Izdzēsts : " + fails + " Laiks: " + date.today().strftime("%Y%m%d") +
-        '_' + datetime.datetime.now().time().strftime("%H:%M:%S"))
-    auditacija(darbiba='csv', parametri="Izdzēsts fails: " + fails,
-               autorizacijas_lvl='INFO', statuss='OK')
+    try:
+        laiks = kopejs_laiks
+        jaunais_nosaukums = fails.replace(no_mapes, uz_mapi + laiks.strftime('%Y%m%d_%H%M%S%f')[:-3] + '_')
+        shutil.copyfile(fails, jaunais_nosaukums)
+        logi(
+            "Pārkopēts : " + fails + " -> " + jaunais_nosaukums + " Laiks: " + date.today().strftime("%Y%m%d") +
+            '_' + datetime.datetime.now().time().strftime("%H:%M:%S"))
+        auditacija(darbiba='csv', parametri="Kopēt fails: " + fails + " -> " + jaunais_nosaukums,
+                   autorizacijas_lvl='INFO', statuss='OK')
+        os.remove(fails)
+        logi(
+            "Izdzēsts : " + fails + " Laiks: " + date.today().strftime("%Y%m%d") +
+            '_' + datetime.datetime.now().time().strftime("%H:%M:%S"))
+        auditacija(darbiba='csv', parametri="Izdzēsts fails: " + fails,
+                   autorizacijas_lvl='INFO', statuss='OK')
+        return jaunais_nosaukums
+    except Exception as e:
+        logi(
+            "Kļūda kopējot: " + str(e) + " Laiks: " + date.today().strftime("%Y%m%d") +
+            '_' + datetime.datetime.now().time().strftime("%H:%M:%S"))
+        auditacija(darbiba='csv', parametri="Kļūda kopējot: " + str(e),
+                   autorizacijas_lvl='ERROR', statuss='OK')
+        return None
+
 
 def saglabat(csvreader, fails, kopejs_laiks):
     try:
@@ -36,7 +45,7 @@ def saglabat(csvreader, fails, kopejs_laiks):
         skaits = 0
         atslegas = None
         csv_faili = Csv_faili(
-            api=fails[fails.rfind(os.sep)+1:fails.rfind('.')],
+            api=str(fails[fails.rfind(os.sep)+1:])[:-42],
             csv_file_name=date.today().strftime("%Y%m%d") + '_' + laiks.strftime("%H%M%S") + '_' +
                           fails[fails.rfind(os.sep)+1:],
             # created=laiks.now(),
