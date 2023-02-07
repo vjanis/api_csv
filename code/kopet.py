@@ -44,10 +44,10 @@ def saglabat(csvreader, fails, kopejs_laiks):
         pirma_rinda = True
         skaits = 0
         atslegas = None
+
         csv_faili = Csv_faili(
-            api=str(fails[fails.rfind(os.sep)+1:])[:-42],
-            csv_file_name=date.today().strftime("%Y%m%d") + '_' + laiks.strftime("%H%M%S") + '_' +
-                          fails[fails.rfind(os.sep)+1:],
+            api=str(fails[fails.rfind(os.sep)+1:fails.rfind('.')])[38:],
+            csv_file_name=fails[fails.rfind(os.sep)+1:],
             # created=laiks.now(),
             is_active=True
         )
