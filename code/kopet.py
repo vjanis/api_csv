@@ -2,7 +2,8 @@ import shutil
 import os
 import csv
 from datetime import datetime, date
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy import select
 from code.logosana import logi, auditacija
 import json
 
@@ -44,10 +45,6 @@ def saglabat(csvreader, fails, kopejs_laiks):
         pirma_rinda = True
         skaits = 0
         atslegas = None
-        print("os.sep: " + os.sep)
-        print("fails" + fails)
-        print(fails[fails.rfind(os.sep)+1:fails.rfind('.')])
-        print(str(fails[fails.rfind(os.sep)+1:fails.rfind('.')])[38:])
         csv_faili = Csv_faili(
             api=str(fails[fails.rfind(os.sep)+1:fails.rfind('.')])[38:],
             csv_file_name=fails[fails.rfind(os.sep)+1:],
@@ -100,15 +97,19 @@ def saglabat(csvreader, fails, kopejs_laiks):
 
 
 def faila_konfiguracija(fails):
-    Session = sessionmaker(bind=engine)
-    s = Session()
-    s.get(Kofiguracija, {"id": 1, "version_id": 10})
-    return None
+    with Session(engine) as session:
+        statement = select(Kofiguracija).filter_by(api=str(fails[fails.rfind(os.sep)+1:fails.rfind('.')])[38:])
+        user_obj = session.scalars(statement).all()
+    session.close()
+
+    return user_obj
 
 
 def nolasit_csv(fails, atdalitajs, kopejs_laiks):
     try:
-        #konfigs = faila_konfiguracija(fails)
+        konfigs = faila_konfiguracija(fails)
+        print(konfigs)
+
         with open(fails, 'r', encoding="utf-8") as file:
             csvreader = csv.reader(file, delimiter=atdalitajs)
             # saglabat_iin(csvreader, fails)
