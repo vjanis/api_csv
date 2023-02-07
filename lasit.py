@@ -18,7 +18,7 @@ def darbiba_ar_failu(fails):
     kopejs_laiks = datetime.now()
     jaunais_fails = kopet_failu(fails, failu_mape + os.sep, uz_mapi + os.sep, kopejs_laiks)
     if jaunais_fails is not None:
-        nolasit_csv(fails, atdalitajs, kopejs_laiks)
+        nolasit_csv(jaunais_fails, atdalitajs, kopejs_laiks)
 
 def parbauda():
     for x in os.listdir(failu_mape):
