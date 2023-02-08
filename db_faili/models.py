@@ -61,12 +61,15 @@ class Auditacija(Base):
     laiks = Column(DateTime, default=datetime.datetime.utcnow)
     darbiba = Column(String)
     parametri = Column(String)
+    json_text = Column(JSONB)
     autorizacijas_lvl = Column(String)
     statuss = Column(String)
 
     def __repr__(self):
-        return "<Auditacija(id='{}', laiks='{}', darbiba={}, parametri={}, autorizacijas_lvl={}, statuss={})>" \
-            .format(self.id, self.laiks, self.darbiba, self.parametri, self.autorizacijas_lvl, self.statuss)
+        return "<Auditacija(id='{}', laiks='{}', darbiba={}, parametri={}, json_text={}, " \
+               "autorizacijas_lvl={}, statuss={})>" \
+            .format(self.id, self.laiks, self.darbiba, self.parametri, self.json_text,
+                    self.autorizacijas_lvl, self.statuss)
 
 
 class Kofiguracija(Base):
@@ -76,10 +79,11 @@ class Kofiguracija(Base):
     kumulativs = Column(Boolean, unique=False, default=False)
     atdalitajs = Column(String)
     dati = Column(String)
+    json_text = Column(JSONB)
 
     def __repr__(self):
-        return "<Konfiguracija(id='{}', api='{}', kumulativs={}, atdalitajs={}, dati={})>" \
-            .format(self.id, self.api, self.kumulativs, self.atdalitajs, self.dati)
+        return "<Konfiguracija(id='{}', api='{}', kumulativs={}, atdalitajs={}, dati={}, json_text={})>" \
+            .format(self.id, self.api, self.kumulativs, self.atdalitajs, self.dati, self.json_text)
 
 class Metrikas(Base):
     __tablename__ = 'metrikas'
