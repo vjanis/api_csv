@@ -1,33 +1,15 @@
 
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.ext.declarative import declarative_base
+#from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Date, Float, Boolean, JSON, ForeignKey, DateTime, Index
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import DeclarativeBase
 
 import datetime
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+     pass
 
-
-# class Book(Base):
-#     __tablename__ = 'sadale'
-#     id = Column(Integer, primary_key=True)
-#     tips = Column(String)
-#     atvk = Column(String)
-#     nosaukums = Column(String)
-#     gads = Column(String)
-#     periods = Column(String)
-#     datums = Column(String)
-#     sadalits = Column(Float)
-#     pfif = Column(Float)
-#
-# #    pages = Column(Integer)
-# #    published = Column(Date)
-#
-#     def __repr__(self):
-#         return "<Book(tips='{}', atvk='{}', nosaukums={}, gads={}, periods={}, datums={}, sadalits={}, pfif={})>" \
-#             .format(self.tips, self.atvk, self.nosaukums, self.gads,
-#                     self.periods, self.datums, self.sadalits, self.pfif)
 
 class Csv_faili(Base):
     __tablename__ = 'csv_faili'
@@ -64,12 +46,13 @@ class Auditacija(Base):
     json_text = Column(JSONB)
     autorizacijas_lvl = Column(String)
     statuss = Column(String)
+    metrika = Column(Integer)
 
     def __repr__(self):
         return "<Auditacija(id='{}', laiks='{}', darbiba={}, parametri={}, json_text={}, " \
-               "autorizacijas_lvl={}, statuss={})>" \
+               "autorizacijas_lvl={}, statuss={}, metrika={})>" \
             .format(self.id, self.laiks, self.darbiba, self.parametri, self.json_text,
-                    self.autorizacijas_lvl, self.statuss)
+                    self.autorizacijas_lvl, self.statuss, self.metrika)
 
 
 class Kofiguracija(Base):
@@ -88,11 +71,12 @@ class Kofiguracija(Base):
 class Metrikas(Base):
     __tablename__ = 'metrikas'
     id = Column(Integer, primary_key=True)
-    metrika = Column(String)
-    vertiba = Column(String)
+    metrika = Column(Integer, unique=True)
+    vertiba = Column(Integer, default=0)
+    apraksts = Column(String)
     seciba = Column(Integer)
     statuss = Column(Boolean, unique=False, default=True)
 
     def __repr__(self):
-        return "<kofiguracija(id='{}', metrika='{}', vertiba={}, seciba={}, statuss={})>" \
-            .format(self.id, self.metrika, self.vertiba, self.seciba, self.statuss)
+        return "<kofiguracija(id='{}', metrika='{}', vertiba={}, apraksts={}, seciba={}, statuss={})>" \
+            .format(self.id, self.metrika, self.vertiba, self.apraksts, self.seciba, self.statuss)
