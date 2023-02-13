@@ -79,6 +79,10 @@ def db_detalas():
         s.add(Metrikas(metrika=3, apraksts='api_csv: pārtrauca darbību ar kļūdu', seciba=3))
         s.add(Metrikas(metrika=4, apraksts='api_csv: Atrasts .csv fails', seciba=4))
         s.add(Metrikas(metrika=5, apraksts='api_csv: Atrasts nekortekts fails (ne .csv fails)', seciba=5))
+        s.add(Metrikas(metrika=6, apraksts='api_faili_web: Augšuplādēts fails par lielu', seciba=6))
+        s.add(Metrikas(metrika=7, apraksts='api_faili_web: Atrasts nekortekts fails (ne .csv fails)', seciba=7))
+        s.add(Metrikas(metrika=8, apraksts='api_faili_web: Augšuplādēts .csv fails', seciba=8))
+        s.add(Metrikas(metrika=9, apraksts='api_faili_web: Augšuplādēts kļūdaina', seciba=9))
         s.commit()
     with Session(engine) as s:
         s.execute(text('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);'))
