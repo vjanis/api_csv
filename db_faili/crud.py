@@ -80,21 +80,17 @@ def db_detalas():
         s.add(Metrikas(metrika=4, apraksts='api_csv: Atrasts .csv fails', seciba=4))
         s.add(Metrikas(metrika=5, apraksts='api_csv: Atrasts nekortekts fails (ne .csv fails)', seciba=5))
         s.commit()
-    print('1')
     with Session(engine) as s:
         s.execute(text('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);'))
         s.commit()
-    print('2')
     with Session(engine) as s:
-        s.execute(text("CREATE OR REPLACE FUNCTION fn_metrika() RETURNS void AS "
-                       "$BODY$ update metrikas set vertiba = vertiba+1 where metrika='1' $BODY$ LANGUAGE sql"))
+        s.execute(text("CREATE OR REPLACE FUNCTION fn_metrika(metrik int) RETURNS void AS "
+                       "$BODY$ update metrikas set vertiba = vertiba+1 where metrika=metrik $BODY$ LANGUAGE sql"))
         s.commit()
-    print('3')
     with Session(engine) as s:
         s.execute(text("CREATE OR REPLACE FUNCTION tr_fn_metrika() RETURNS trigger AS $BODY$ "
-                       "begin perform fn_metrika(); return new; end $BODY$ LANGUAGE plpgsql"))
+                       "begin perform fn_metrika(NEW.metrika); return new; end $BODY$ LANGUAGE plpgsql"))
         s.commit()
-    print('4')
     with Session(engine) as s:
         s.execute(text("CREATE TRIGGER tr_metrika "
                        "AFTER INSERT ON auditacija FOR EACH ROW EXECUTE PROCEDURE tr_fn_metrika()"))

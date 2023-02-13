@@ -21,7 +21,7 @@ def auditacija(darbiba: str = '', laiks: DateTime = datetime.datetime.utcnow, pa
         audit.parametri = parametri
         audit.autorizacijas_lvl = autorizacijas_lvl
         audit.statuss = statuss
-        audit.metrika = 1
+        audit.metrika = 0
 
         try:
             with Session(engine) as s:
