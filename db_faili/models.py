@@ -63,20 +63,22 @@ class Kofiguracija(Base):
     atdalitajs = Column(String)
     dati = Column(String)
     json_text = Column(JSONB)
+    statuss = Column(Boolean, unique=False, default=True)
 
     def __repr__(self):
-        return "<Konfiguracija(id='{}', api='{}', kumulativs={}, atdalitajs={}, dati={}, json_text={})>" \
-            .format(self.id, self.api, self.kumulativs, self.atdalitajs, self.dati, self.json_text)
+        return "<Konfiguracija(id='{}', api='{}', kumulativs={}, atdalitajs={}, dati={}, json_text={}, statuss={})>" \
+            .format(self.id, self.api, self.kumulativs, self.atdalitajs, self.dati, self.json_text, self.statuss)
 
 class Metrikas(Base):
     __tablename__ = 'metrikas'
     id = Column(Integer, primary_key=True)
     metrika = Column(Integer, unique=True)
     vertiba = Column(Integer, default=0)
+    param = Column(String)
     apraksts = Column(String)
     seciba = Column(Integer)
     statuss = Column(Boolean, unique=False, default=True)
 
     def __repr__(self):
-        return "<kofiguracija(id='{}', metrika='{}', vertiba={}, apraksts={}, seciba={}, statuss={})>" \
-            .format(self.id, self.metrika, self.vertiba, self.apraksts, self.seciba, self.statuss)
+        return "<kofiguracija(id='{}', metrika='{}', vertiba={}, param={}, apraksts={}, seciba={}, statuss={})>" \
+            .format(self.id, self.metrika, self.vertiba, self.param, self.apraksts, self.seciba, self.statuss)

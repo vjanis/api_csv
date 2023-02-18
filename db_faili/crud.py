@@ -1,10 +1,9 @@
 from sqlalchemy import create_engine, select, text
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session
 
 import code
 from config import DATABASE_URI, CSV_ATDALITAJS, PARBAUDES_TIMERIS
 from db_faili.models import Kofiguracija, Base, Metrikas
-import time
 
 engine = create_engine(DATABASE_URI)
 
@@ -65,6 +64,8 @@ def create_database():
                         autorizacijas_lvl='ERROR', statuss='OK')
         code.logi("Draugi, nav labi! Inicējot bāzi ir kļūda: " + str(e))
 
+
+
 def db_detalas():
     with Session(engine) as s:
         kofiguracija = Kofiguracija(
@@ -74,15 +75,33 @@ def db_detalas():
             dati=str(PARBAUDES_TIMERIS),
         )
         s.add(kofiguracija)
-        s.add(Metrikas(metrika=1, apraksts='api_csv: startējas', seciba=1))
-        s.add(Metrikas(metrika=2, apraksts='api_csv: pārtrauca darbību', seciba=2))
-        s.add(Metrikas(metrika=3, apraksts='api_csv: pārtrauca darbību ar kļūdu', seciba=3))
-        s.add(Metrikas(metrika=4, apraksts='api_csv: Atrasts .csv fails', seciba=4))
-        s.add(Metrikas(metrika=5, apraksts='api_csv: Atrasts nekortekts fails (ne .csv fails)', seciba=5))
-        s.add(Metrikas(metrika=6, apraksts='api_faili_web: Augšuplādēts fails par lielu', seciba=6))
-        s.add(Metrikas(metrika=7, apraksts='api_faili_web: Augšuplādēts nekortekts fails (ne .csv fails)', seciba=7))
-        s.add(Metrikas(metrika=8, apraksts='api_faili_web: Augšuplādēts .csv fails', seciba=8))
-        s.add(Metrikas(metrika=9, apraksts='api_faili_web: Augšuplāde kļūdaina', seciba=9))
+        s.add(Metrikas(metrika=1, param='api_csv_start', apraksts='api_csv: startējas', seciba=1))
+        s.add(Metrikas(metrika=2, param='api_csv_stop', apraksts='api_csv: pārtrauca darbību', seciba=2))
+        s.add(Metrikas(metrika=3, param='api_csv_error', apraksts='api_csv: pārtrauca darbību ar kļūdu', seciba=3))
+        s.add(Metrikas(metrika=4, param='api_csv_find_csv_file', apraksts='api_csv: Atrasts .csv fails', seciba=4))
+        s.add(Metrikas(metrika=5, param='api_csv_find_incorrect_file',
+                       apraksts='api_csv: Atrasts nekortekts fails (ne .csv fails)', seciba=5))
+        s.add(Metrikas(metrika=6, param='api_faili_web_file_too_large',
+                       apraksts='api_faili_web: Augšuplādēts fails par lielu', seciba=6))
+        s.add(Metrikas(metrika=7, param='api_faili_web_incorrect_file',
+                       apraksts='api_faili_web: Augšuplādēts nekortekts fails (ne .csv fails)', seciba=7))
+        s.add(Metrikas(metrika=8, param='api_faili_web_csv_file_upload',
+                       apraksts='api_faili_web: Augšuplādēts .csv fails', seciba=8))
+        s.add(Metrikas(metrika=9, param='api_faili_web_error', apraksts='api_faili_web: Augšuplāde kļūdaina', seciba=9))
+        s.add(Metrikas(metrika=10, param='api_csv_save_config',
+                       apraksts='api_csv: Saglabata faila konfigurācija', seciba=10))
+        s.add(Metrikas(metrika=11, param='api_csv_save_faile_config_error',
+                       apraksts='api_csv: Saglabājot failu, fails neatbilst konfigurācijai', seciba=11))
+        s.add(Metrikas(metrika=12, param='api_csv_save_faile',
+                       apraksts='api_csv: Saglabāti faili', seciba=12))
+        s.add(Metrikas(metrika=13, param='api_csv_save_faile_error',
+                       apraksts='api_csv: Saglabājot failu raddusies kļuda', seciba=13))
+        s.add(Metrikas(metrika=14, param='api_csv_save_faile_copy',
+                       apraksts='api_csv: Pārkopēts fails no mapes kur tiek augšuplādēts uz arhīva mapi', seciba=14))
+        s.add(Metrikas(metrika=15, param='api_csv_save_faile_delete',
+                       apraksts='api_csv: Izdzēsts fails no augšuplādes mapes', seciba=15))
+        s.add(Metrikas(metrika=16, param='api_csv_save_faile_error',
+                       apraksts='api_csv: kopējot\dzēōt failu notikusi kļūda', seciba=16))
         s.commit()
     with Session(engine) as s:
         s.execute(text('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);'))
