@@ -60,8 +60,8 @@ def create_database():
             if len(konfig) == 0:
                 db_detalas()
     except Exception as e:
-        code.auditacija(darbiba='csv_db', parametri="Draugi, nav labi! Inicējot bāzi ir kļūda:  " + str(e),
-                        autorizacijas_lvl='ERROR', statuss='OK')
+        code.auditacijas(darbiba='api_csv', parametri="Draugi, nav labi! Inicējot bāzi ir kļūda:  " + str(e),
+                        autorizacijas_lvl='ERROR', statuss='OK', metrika=3)
         code.logi("Draugi, nav labi! Inicējot bāzi ir kļūda: " + str(e))
 
 
@@ -101,7 +101,11 @@ def db_detalas():
         s.add(Metrikas(metrika=15, param='api_csv_delete_faile',
                        apraksts='api_csv: Izdzēsts fails no augšuplādes mapes', seciba=15))
         s.add(Metrikas(metrika=16, param='api_csv_delete_copy_faile_error',
-                       apraksts='api_csv: kopējot\dzēšot failu notikusi kļūda', seciba=16))
+                       apraksts='api_csv: kopējot vai dzēšot failu notikusi kļūda', seciba=16))
+        s.add(Metrikas(metrika=17, param='api_csv_create_db_config_index',
+                       apraksts='api_csv: Izveidota datubāze, konfigurācija, index, trigeri, fnkcijas', seciba=17))
+        s.add(Metrikas(metrika=18, param='api_csv_create_db_config_index_error',
+                       apraksts='api_csv: kļūda veidojot sākotnējo datubāzi', seciba=18))
         s.commit()
     with Session(engine) as s:
         s.execute(text('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);'))
@@ -119,6 +123,6 @@ def db_detalas():
                        "AFTER INSERT ON auditacija FOR EACH ROW EXECUTE PROCEDURE tr_fn_metrika()"))
         s.commit()
 
-    code.auditacija(darbiba='csv_db', parametri="Izveidota db, default konfigs un indexi",
+    code.auditacijas(darbiba='api_csv', parametri="Izveidota db, default konfigs, funkcijas, trigeri un indexi",
                     autorizacijas_lvl='INFO', statuss='OK')
-    code.logi("Izveidota db, default konfigs un indexi")
+    code.logi("Izveidota db, default konfigs, funkcijas, trigeri un indexi")
