@@ -95,13 +95,13 @@ def db_detalas():
         s.add(Metrikas(metrika=12, param='api_csv_save_faile',
                        apraksts='api_csv: Saglabāti faili', seciba=12))
         s.add(Metrikas(metrika=13, param='api_csv_save_faile_error',
-                       apraksts='api_csv: Saglabājot failu raddusies kļuda', seciba=13))
-        s.add(Metrikas(metrika=14, param='api_csv_save_faile_copy',
+                       apraksts='api_csv: Saglabājot failu radusies kļūda', seciba=13))
+        s.add(Metrikas(metrika=14, param='api_csv_copy_faile',
                        apraksts='api_csv: Pārkopēts fails no mapes kur tiek augšuplādēts uz arhīva mapi', seciba=14))
-        s.add(Metrikas(metrika=15, param='api_csv_save_faile_delete',
+        s.add(Metrikas(metrika=15, param='api_csv_delete_faile',
                        apraksts='api_csv: Izdzēsts fails no augšuplādes mapes', seciba=15))
-        s.add(Metrikas(metrika=16, param='api_csv_save_faile_error',
-                       apraksts='api_csv: kopējot\dzēōt failu notikusi kļūda', seciba=16))
+        s.add(Metrikas(metrika=16, param='api_csv_delete_copy_faile_error',
+                       apraksts='api_csv: kopējot\dzēšot failu notikusi kļūda', seciba=16))
         s.commit()
     with Session(engine) as s:
         s.execute(text('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);'))
