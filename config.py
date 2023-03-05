@@ -8,7 +8,7 @@ ieladet_env = True
 try:
     if ieladet_env:
         password = os.environ['POSTGRES_PASSWORD']
-        password = os.environ['POSTGRES_CONTAINER']
+        serveris = os.environ['POSTGRES_CONTAINER']
         # serveris = 'api_db_image'
         del os.environ['POSTGRES_PASSWORD']
         del os.environ['POSTGRES_CONTAINER']
