@@ -41,7 +41,7 @@ def parbauda():
 if __name__ == "__main__":
     try:
         konfig = create_database()
-        auditacijas(darbiba='csv', parametri="Programma startējas", autorizacijas_lvl='INFO', statuss='OK', metrika=1)
+        auditacijas(darbiba='csv', parametri="Programma startējas. v"+VERSIJA, autorizacijas_lvl='INFO', statuss='OK', metrika=1)
         if konfig is not None:
             atdalitajs = konfig[0].atdalitajs
             #print(konfig[0].dati)

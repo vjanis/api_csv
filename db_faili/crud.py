@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, select, text
 from sqlalchemy.orm import Session
 
 import code
-from config import DATABASE_URI, CSV_ATDALITAJS, PARBAUDES_TIMERIS
+from config import DATABASE_URI, CSV_ATDALITAJS, PARBAUDES_TIMERIS, VERSIJA
 from db_faili.models import Kofiguracija, Base, Metrikas
 
 engine = create_engine(DATABASE_URI)
@@ -56,14 +56,50 @@ def create_database():
         with Session(engine) as se:
             konfig = se.execute(select(Kofiguracija).where(Kofiguracija.api == '|||')).first()
             if konfig is None:
-                konfig = []
-            if len(konfig) == 0:
                 db_detalas()
+            else:
+                db_versija(konfig[0].json_text['versija'])
+            # if len(konfig) == 0:
+            #     db_detalas()
     except Exception as e:
         code.auditacijas(darbiba='api_csv', parametri="Draugi, nav labi! Inicējot bāzi ir kļūda:  " + str(e),
                         autorizacijas_lvl='ERROR', statuss='OK', metrika=3)
         code.logi("Draugi, nav labi! Inicējot bāzi ir kļūda: " + str(e))
 
+def db_versija(kofig):
+    try:
+        db_versija = int(str(kofig[1:]).replace(".", ""))
+        #app_versija = int(str(VERSIJA[1:]).replace(".", ""))
+
+        # v01.00.01
+        if db_versija < 10001:
+            with Session(engine) as s:
+                s.add(Metrikas(metrika=21, param='api_local_web_info',
+                               apraksts='api_local_web: INFO', seciba=21))
+                s.add(Metrikas(metrika=22, param='api_local_web_info_error',
+                               apraksts='api_local_web: INFO ERROR', seciba=22))
+                s.add(Metrikas(metrika=23, param='api_local_web_auditacija',
+                               apraksts='api_local_web: auditacija', seciba=23))
+                s.add(Metrikas(metrika=24, param='api_local_web_auditacija_error',
+                               apraksts='api_local_web: auditacija ERROR', seciba=24))
+                s.add(Metrikas(metrika=25, param='api_csv_versija',
+                               apraksts='api_csv: izpilditi versijas skripti', seciba=25))
+                s.add(Metrikas(metrika=26, param='api_csv_versija',
+                               apraksts='api_csv: izpilditi versijas skripti ERROR', seciba=26))
+
+                s.query(Kofiguracija).filter(Kofiguracija.api == '|||')\
+                    .update({Kofiguracija.json_text: {"versija": VERSIJA}}, synchronize_session=False)
+                s.commit()
+                code.auditacijas(darbiba='api_csv',
+                                 parametri="Izpilditi versijas skripts: v01.00.01 ceļot no " + kofig + " uz versiju: "
+                                           + VERSIJA,
+                                 autorizacijas_lvl='INFO', statuss='OK', metrika=25)
+                code.logi("Izpilditi versijas skripts:  v01.00.01 ceļot uz versiju: " + VERSIJA)
+
+    except Exception as e:
+        code.auditacijas(darbiba='api_csv', parametri="Pildot versijas skriptus kļūda:  " + VERSIJA + " err:" + str(e),
+                         autorizacijas_lvl='ERROR', statuss='OK', metrika=26)
+        code.logi("Versijas skriptos kļūda: " + VERSIJA + " err:" + str(e))
 
 
 def db_detalas():
@@ -71,6 +107,7 @@ def db_detalas():
         kofiguracija = Kofiguracija(
             api='|||',
             kumulativs=True,
+            json_text={"versija": VERSIJA},
             atdalitajs=CSV_ATDALITAJS,
             dati=str(PARBAUDES_TIMERIS),
         )
@@ -106,7 +143,12 @@ def db_detalas():
                        apraksts='api_csv: Izveidota datubāze, konfigurācija, index, trigeri, fnkcijas', seciba=17))
         s.add(Metrikas(metrika=18, param='api_csv_create_db_config_index_error',
                        apraksts='api_csv: kļūda veidojot sākotnējo datubāzi', seciba=18))
+        s.add(Metrikas(metrika=19, param='api_web_atvertie_dati',
+                       apraksts='api_web: pieprasījumi uz atvērtajiem datiem', seciba=19))
+        s.add(Metrikas(metrika=20, param='api_web_atvertie_dati_error',
+                       apraksts='api_web: kļūdas veidojot atvērto datu pieprasījumu', seciba=20))
         s.commit()
+
     with Session(engine) as s:
         s.execute(text('CREATE INDEX dataginpathops ON csv_faili_json USING gin (json_text jsonb_path_ops);'))
         s.commit()
@@ -122,7 +164,7 @@ def db_detalas():
         s.execute(text("CREATE TRIGGER tr_metrika "
                        "AFTER INSERT ON auditacija FOR EACH ROW EXECUTE PROCEDURE tr_fn_metrika()"))
         s.commit()
-
+    db_versija('v00.00.00')
     code.auditacijas(darbiba='api_csv', parametri="Izveidota db, default konfigs, funkcijas, trigeri un indexi",
                     autorizacijas_lvl='INFO', statuss='OK')
-    code.logi("Izveidota db, default konfigs, funkcijas, trigeri un indexi")
+    code.logi("Izveidota db: " + VERSIJA + ", default konfigs, funkcijas, trigeri un indexi")

@@ -1,7 +1,7 @@
 
 from sqlalchemy.dialects.postgresql import JSONB
 #from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Date, Float, Boolean, JSON, ForeignKey, DateTime, Index
+from sqlalchemy import Column, Integer, String, Date, Float, Boolean, JSON, ForeignKey, DateTime, Index, Sequence
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import DeclarativeBase
 
@@ -71,7 +71,7 @@ class Kofiguracija(Base):
 
 class Metrikas(Base):
     __tablename__ = 'metrikas'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer,  Sequence('auditacija_id_seq'), primary_key=True)
     metrika = Column(Integer, unique=True)
     vertiba = Column(Integer, default=0)
     param = Column(String)

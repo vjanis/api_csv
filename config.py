@@ -23,3 +23,4 @@ DATABASE_URI = 'postgresql://postgres:'+password+'@'+serveris+':5432/postgres'
 
 PARBAUDES_TIMERIS = 10
 CSV_ATDALITAJS = '|'
+VERSIJA = 'v01.00.01'
