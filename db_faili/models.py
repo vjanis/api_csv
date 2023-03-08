@@ -39,7 +39,7 @@ class Csv_faili_json(Base):
 
 class Auditacija(Base):
     __tablename__ = 'auditacija'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Sequence('auditacija_id_seq'), primary_key=True)
     laiks = Column(DateTime, default=datetime.datetime.utcnow)
     darbiba = Column(String)
     parametri = Column(String)
@@ -71,7 +71,7 @@ class Kofiguracija(Base):
 
 class Metrikas(Base):
     __tablename__ = 'metrikas'
-    id = Column(Integer,  Sequence('auditacija_id_seq'), primary_key=True)
+    id = Column(Integer, Sequence('metrikas_id_seq'), primary_key=True)
     metrika = Column(Integer, unique=True)
     vertiba = Column(Integer, default=0)
     param = Column(String)
