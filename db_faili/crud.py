@@ -110,6 +110,22 @@ def db_versija(kofig):
                                  autorizacijas_lvl='INFO', statuss='OK', metrika=25)
                 code.logi("Izpilditi versijas skripts:  v01.00.02 ceļot uz versiju: " + VERSIJA)
 
+            # v01.00.03
+            if db_versija < 10003:
+                with Session(engine) as s:
+                    s.add(Metrikas(metrika=28, param='api_web_api_config_error',
+                                   apraksts='api_web: nav api konfigurācijas pieprasot API datu', seciba=28))
+                    s.add(Metrikas(metrika=29, param='api_web_api_filter_error',
+                                   apraksts='api_web: nekorekti filtra parametri', seciba=29))
+                    s.query(Kofiguracija).filter(Kofiguracija.api == '|||') \
+                        .update({Kofiguracija.json_text: {"versija": VERSIJA}}, synchronize_session=False)
+                    s.commit()
+                    code.auditacijas(darbiba='api_csv',
+                                     parametri="Izpilditi versijas skripts: v01.00.03 ceļot no " + kofig + " uz versiju: "
+                                               + VERSIJA,
+                                     autorizacijas_lvl='INFO', statuss='OK', metrika=25)
+                    code.logi("Izpilditi versijas skripts:  v01.00.03 ceļot uz versiju: " + VERSIJA)
+
     except Exception as e:
         code.auditacijas(darbiba='api_csv', parametri="Pildot versijas skriptus kļūda:  " + VERSIJA + " err:" + str(e),
                          autorizacijas_lvl='ERROR', statuss='OK', metrika=26)
